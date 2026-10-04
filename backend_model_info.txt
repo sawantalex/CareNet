@@ -1,0 +1,39 @@
+==================================================
+CARENET MODEL DIAGNOSTIC INSPECTOR
+==================================================
+
+--- 1. HEART DISEASE MODEL ---
+Model Type: <class 'sklearn.pipeline.Pipeline'>
+Is Pipeline: True
+Pipeline Steps:
+  - preprocessor: <class 'sklearn.compose._column_transformer.ColumnTransformer'>
+  - classifier: <class 'sklearn.svm._classes.SVC'>
+
+Preprocessor Transformers:
+    Transformer 'numerical': ['Age', 'Blood Pressure', 'Cholesterol Level', 'BMI', 'Sleep Hours', 'Triglyceride Level', 'Fasting Blood Sugar', 'CRP Level', 'Homocysteine Level'] -> <class 'sklearn.pipeline.Pipeline'>
+    Transformer 'categorical': ['Gender', 'Exercise Habits', 'Smoking', 'Family Heart Disease', 'Diabetes', 'High Blood Pressure', 'Low HDL Cholesterol', 'High LDL Cholesterol', 'Alcohol Consumption', 'Stress Level', 'Sugar Consumption'] -> <class 'sklearn.pipeline.Pipeline'>
+Classifier Type: <class 'sklearn.svm._classes.SVC'>
+Has predict_proba: True
+
+Testing Heart Model prediction with sample input:
+   Age  ... Sugar Consumption
+0   45  ...            Medium
+
+[1 rows x 20 columns]
+Error inspecting heart model: 'SimpleImputer' object has no attribute '_fill_dtype'
+
+--- 2. MEDICAL DIAGNOSIS MODEL ---
+Model Type: <class 'sklearn.pipeline.Pipeline'>
+Is Pipeline: True
+Pipeline Steps:
+  - tfidf: <class 'sklearn.feature_extraction.text.TfidfVectorizer'>
+  - classifier: <class 'sklearn.svm._classes.LinearSVC'>
+Medical Classifier Type: <class 'sklearn.svm._classes.LinearSVC'>
+Has predict_proba: False
+Number of classes: 22
+Sample classes (first 10): ['allergy' 'arthritis' 'bronchial asthma' 'cervical spondylosis'
+ 'chicken pox' 'common cold' 'dengue' 'diabetes' 'drug reaction'
+ 'fungal infection']
+
+Testing Medical Model prediction with sample symptom input:
+Medical Prediction result: allergy

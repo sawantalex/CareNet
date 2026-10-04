@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+.pnpm-store/
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+.env
+
+# SQLite databases & logs
+*.db
+*.sqlite3
+*.log
+
+# Build & Dist outputs
+dist/
+build/
+frontend/dist/
+frontend/build/
+
+# IDE & System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
