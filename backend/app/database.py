@@ -1,3 +1,4 @@
+import os
 import logging
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, declarative_base
@@ -18,11 +19,11 @@ def _create_tables(engine_obj):
 
 def get_engine():
     """
-    Attempts to connect to MySQL if configured and reachable.
+    Attempts to connect to primary database if reachable.
     Otherwise falls back to SQLite database (/tmp/carenet.db on Vercel).
     """
     db_url = settings.DATABASE_URL
-    if db_url and not db_url.startswith("mysql+pymysql://root:@localhost"):
+    if db_url and not ("localhost" in db_url or "127.0.0.1" in db_url):
         try:
             engine = create_engine(
                 db_url,
@@ -37,7 +38,11 @@ def get_engine():
         except Exception as e:
             logger.warning(f"Could not connect to primary database at {db_url}: {e}")
 
+    # Fallback to SQLite. Force /tmp/carenet.db on Vercel/serverless/Linux
     fallback_url = settings.SQLITE_FALLBACK_URL
+    if os.path.exists("/tmp") and os.access("/tmp", os.W_OK):
+        fallback_url = "sqlite:////tmp/carenet.db"
+
     logger.info(f"Using SQLite database: {fallback_url}")
     fallback_engine = create_engine(
         fallback_url,
