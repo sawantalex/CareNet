@@ -4,6 +4,11 @@ from pydantic_settings import BaseSettings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+def _get_sqlite_fallback() -> str:
+    if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME") or os.getenv("AWS_EXECUTION_ENV"):
+        return "sqlite:////tmp/carenet.db"
+    return os.getenv("SQLITE_FALLBACK_URL", "sqlite:///./carenet.db")
+
 class Settings(BaseSettings):
     PROJECT_NAME: str = "CareNet AI Health Risk & Medical Diagnostics Platform"
     API_V1_STR: str = "/api"
@@ -13,7 +18,7 @@ class Settings(BaseSettings):
     
     # Database configuration
     DATABASE_URL: str = os.getenv("DATABASE_URL", "mysql+pymysql://root:@localhost:3306/carenet_db")
-    SQLITE_FALLBACK_URL: str = os.getenv("SQLITE_FALLBACK_URL", "sqlite:///./carenet.db")
+    SQLITE_FALLBACK_URL: str = _get_sqlite_fallback()
     
     # Model paths
     HEART_MODEL_PATH: Path = BASE_DIR.parent / "models" / "heart_disease_model.pkl"

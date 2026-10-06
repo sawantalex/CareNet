@@ -8,30 +8,43 @@ logger = logging.getLogger("carenet.database")
 # Base class for SQLAlchemy ORM models
 Base = declarative_base()
 
+def _create_tables(engine_obj):
+    try:
+        from app.models import user, prediction
+        Base.metadata.create_all(bind=engine_obj)
+        logger.info("Database tables verified/created successfully.")
+    except Exception as e:
+        logger.error(f"Error creating database tables: {e}")
+
 def get_engine():
     """
-    Attempts to connect to MySQL.
-    If MySQL server or database is not reachable, creates/uses SQLite database as fallback.
+    Attempts to connect to MySQL if configured and reachable.
+    Otherwise falls back to SQLite database (/tmp/carenet.db on Vercel).
     """
-    try:
-        # First attempt MySQL
-        engine = create_engine(
-            settings.DATABASE_URL,
-            pool_pre_ping=True,
-            pool_recycle=3600
-        )
-        with engine.connect() as conn:
-            conn.execute(text("SELECT 1"))
-        logger.info("Successfully connected to MySQL database.")
-        return engine
-    except Exception as e:
-        logger.warning(f"Could not connect to MySQL database at {settings.DATABASE_URL}: {e}")
-        logger.info(f"Falling back to local SQLite database: {settings.SQLITE_FALLBACK_URL}")
-        fallback_engine = create_engine(
-            settings.SQLITE_FALLBACK_URL,
-            connect_args={"check_same_thread": False}
-        )
-        return fallback_engine
+    db_url = settings.DATABASE_URL
+    if db_url and not db_url.startswith("mysql+pymysql://root:@localhost"):
+        try:
+            engine = create_engine(
+                db_url,
+                pool_pre_ping=True,
+                pool_recycle=3600
+            )
+            with engine.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            logger.info("Successfully connected to primary database.")
+            _create_tables(engine)
+            return engine
+        except Exception as e:
+            logger.warning(f"Could not connect to primary database at {db_url}: {e}")
+
+    fallback_url = settings.SQLITE_FALLBACK_URL
+    logger.info(f"Using SQLite database: {fallback_url}")
+    fallback_engine = create_engine(
+        fallback_url,
+        connect_args={"check_same_thread": False}
+    )
+    _create_tables(fallback_engine)
+    return fallback_engine
 
 engine = get_engine()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -44,5 +57,4 @@ def get_db():
         db.close()
 
 def init_db():
-    from app.models import user, prediction
-    Base.metadata.create_all(bind=engine)
+    _create_tables(engine)
