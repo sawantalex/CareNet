@@ -5,16 +5,8 @@ from pydantic_settings import BaseSettings
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 def _get_sqlite_fallback() -> str:
-    is_serverless = (
-        os.getenv("VERCEL") is not None
-        or os.getenv("VERCEL_ENV") is not None
-        or os.getenv("VERCEL_URL") is not None
-        or os.getenv("AWS_LAMBDA_FUNCTION_NAME") is not None
-        or os.getenv("AWS_EXECUTION_ENV") is not None
-        or os.path.exists("/var/task")
-        or not os.access(".", os.W_OK)
-    )
-    if is_serverless:
+    # On Vercel / Linux / Cloud serverless environments, /tmp is always available and writable
+    if os.path.exists("/tmp") and os.access("/tmp", os.W_OK):
         return "sqlite:////tmp/carenet.db"
     return os.getenv("SQLITE_FALLBACK_URL", "sqlite:///./carenet.db")
 
