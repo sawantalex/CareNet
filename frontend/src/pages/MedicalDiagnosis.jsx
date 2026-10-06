@@ -4,6 +4,7 @@ import { medicalApi } from '../services/medicalApi';
 import Sidebar from '../components/Sidebar';
 import Disclaimer from '../components/Disclaimer';
 import Loading from '../components/Loading';
+import medicalHero from '../assets/medical_hero.png';
 import '../styles/prediction.css';
 
 const SAMPLE_SYMPTOMS = [
@@ -85,6 +86,46 @@ const MedicalDiagnosis = () => {
             </div>
             <h1>Medical Symptom <span className="gradient-text">Diagnostics</span></h1>
             <p>Describe your symptoms in natural language for AI-assisted classification.</p>
+          </div>
+
+          {/* Medical AI Diagnostics Hero Illustration */}
+          <div className="glass-card" style={{ 
+            marginBottom: '24px', 
+            padding: '0', 
+            overflow: 'hidden', 
+            borderRadius: '20px', 
+            border: '1px solid var(--border-gold)',
+            position: 'relative',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+          }}>
+            <img 
+              src={medicalHero} 
+              alt="AI Medical Diagnostics Workstation" 
+              style={{ 
+                width: '100%', 
+                maxHeight: '280px', 
+                objectFit: 'cover', 
+                display: 'block' 
+              }} 
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: 'linear-gradient(to top, rgba(13, 17, 23, 0.95), transparent)',
+              padding: '16px 24px',
+              display: 'flex',
+              justify: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span style={{ color: 'var(--primary-gold)', fontWeight: '600', fontSize: '0.9rem', letterSpacing: '0.5px' }}>
+                ✦ CARENET CLINICAL AI SUITE
+              </span>
+              <span style={{ background: 'rgba(216, 180, 114, 0.2)', color: 'var(--primary-gold-light)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.8rem', border: '1px solid var(--border-gold)' }}>
+                NLP Symptom Classifier
+              </span>
+            </div>
           </div>
 
           {error && (
