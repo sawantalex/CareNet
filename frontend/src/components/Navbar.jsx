@@ -4,6 +4,8 @@ import { Activity, LogOut, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../context/ThemeContext';
 
+import logo from '../assets/logo.png';
+
 const Navbar = () => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
@@ -19,9 +21,18 @@ const Navbar = () => {
       <div className="navbar-container">
         {/* Brand Logo */}
         <Link to="/" className="navbar-brand">
-          <div className="navbar-logo-icon">
-            <Activity size={22} />
-          </div>
+          <img 
+            src={logo} 
+            alt="CareNet AI Logo" 
+            style={{ 
+              width: '36px', 
+              height: '36px', 
+              borderRadius: '10px', 
+              objectFit: 'cover',
+              border: '1px solid var(--border-gold)',
+              boxShadow: '0 0 12px rgba(216, 180, 114, 0.3)'
+            }} 
+          />
           <span>CARE<span className="gradient-text">NET</span></span>
         </Link>
 
