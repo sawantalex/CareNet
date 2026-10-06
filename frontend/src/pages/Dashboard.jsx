@@ -7,6 +7,7 @@ import { predictionApi } from '../services/predictionApi';
 import Sidebar from '../components/Sidebar';
 import Loading from '../components/Loading';
 import ThreeBackground from '../components/ThreeBackground';
+import dashboard3d from '../assets/dashboard_3d.png';
 import '../styles/dashboard.css';
 
 const Dashboard = () => {
@@ -45,6 +46,48 @@ const Dashboard = () => {
         <div className="welcome-header">
           <h1>Welcome back, <span className="gradient-text">{user?.name && !user.name.includes('Mercer') ? user.name : 'Dr. Alex Sawant'}</span></h1>
           <p style={{ color: 'var(--text-secondary)' }}>Select an AI module below or view your prediction analytics.</p>
+        </div>
+
+        {/* 3D Clinical Diagnostics Analytics Hero Banner */}
+        <div className="glass-card" style={{
+          marginBottom: '28px',
+          padding: '0',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          border: '1px solid var(--border-gold)',
+          boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(216, 180, 114, 0.15)',
+          position: 'relative'
+        }}>
+          <img 
+            src={dashboard3d} 
+            alt="3D Clinical AI Patient Vitals & Systemic Diagnostics" 
+            style={{
+              width: '100%',
+              maxHeight: '280px',
+              objectFit: 'cover',
+              display: 'block'
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: 'linear-gradient(to top, rgba(13, 17, 23, 0.95), transparent)',
+            padding: '16px 24px',
+            display: 'flex',
+            justify: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '8px'
+          }}>
+            <span style={{ color: 'var(--primary-gold)', fontWeight: 700, fontSize: '0.92rem', letterSpacing: '0.5px' }}>
+              ✦ CLINICAL AI VITALSCAN™ 3D DIAGNOSTICS
+            </span>
+            <span style={{ background: 'rgba(216, 180, 114, 0.2)', color: 'var(--primary-gold-light)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.8rem', border: '1px solid var(--border-gold)' }}>
+              Systemic Anatomical Mapping
+            </span>
+          </div>
         </div>
 
         {/* Stats Grid */}

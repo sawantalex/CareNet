@@ -4,6 +4,7 @@ import { HeartPulse, Stethoscope, ArrowUpRight, ArrowDown, Phone, MessageSquare,
 import Disclaimer from '../components/Disclaimer';
 import Footer from '../components/Footer';
 import ThreeBackground from '../components/ThreeBackground';
+import home3d from '../assets/home_3d.png';
 
 const Landing = () => {
   return (
@@ -53,6 +54,60 @@ const Landing = () => {
           <a href="#modules" className="btn btn-secondary" style={{ padding: '16px 32px', fontSize: '1.05rem' }}>
             EXPLORE MODULES <ArrowDown size={20} />
           </a>
+        </div>
+
+        {/* 3D Healthcare Showcase Hero Card */}
+        <div className="glass-card" style={{
+          marginTop: '48px',
+          padding: '0',
+          borderRadius: '24px',
+          overflow: 'hidden',
+          border: '1px solid var(--border-gold)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(216, 180, 114, 0.2)',
+          position: 'relative'
+        }}>
+          <img 
+            src={home3d} 
+            alt="3D Holographic AI Healthcare DNA Analysis" 
+            style={{
+              width: '100%',
+              maxHeight: '420px',
+              objectFit: 'cover',
+              display: 'block'
+            }}
+          />
+          <div style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: 'linear-gradient(to top, rgba(13, 17, 23, 0.95), transparent)',
+            padding: '24px 32px',
+            display: 'flex',
+            justify: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px'
+          }}>
+            <div style={{ textAlign: 'left' }}>
+              <span style={{ color: 'var(--primary-gold)', fontWeight: 700, fontSize: '1.05rem', letterSpacing: '0.5px' }}>
+                ✦ CARENET 3D BIOMARKER ENGINE
+              </span>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', margin: '4px 0 0 0' }}>
+                Real-time multi-dimensional neural diagnostic analysis
+              </p>
+            </div>
+            <span style={{ 
+              background: 'rgba(216, 180, 114, 0.2)', 
+              color: 'var(--primary-gold-light)', 
+              padding: '6px 16px', 
+              borderRadius: '16px', 
+              fontSize: '0.85rem',
+              border: '1px solid var(--border-gold)' 
+            }}>
+              High-Precision 3D Diagnostics
+            </span>
+          </div>
         </div>
       </section>
 
