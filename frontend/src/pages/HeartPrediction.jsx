@@ -4,6 +4,7 @@ import { heartApi } from '../services/heartApi';
 import Sidebar from '../components/Sidebar';
 import Disclaimer from '../components/Disclaimer';
 import Loading from '../components/Loading';
+import heartHero from '../assets/heart_hero.png';
 import '../styles/prediction.css';
 
 const DEFAULT_FORM = {
@@ -134,6 +135,46 @@ const HeartPrediction = () => {
               >
                 <Sparkles size={14} color="#f43f5e" /> Sample High Risk Profile
               </button>
+            </div>
+          </div>
+
+          {/* Heart AI Cardiovascular Risk Hero Illustration */}
+          <div className="glass-card" style={{ 
+            marginBottom: '24px', 
+            padding: '0', 
+            overflow: 'hidden', 
+            borderRadius: '20px', 
+            border: '1px solid rgba(14, 165, 233, 0.4)',
+            position: 'relative',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)'
+          }}>
+            <img 
+              src={heartHero} 
+              alt="3D Holographic Heart Risk Telemetry Scan" 
+              style={{ 
+                width: '100%', 
+                maxHeight: '280px', 
+                objectFit: 'cover', 
+                display: 'block' 
+              }} 
+            />
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: 'linear-gradient(to top, rgba(13, 17, 23, 0.95), transparent)',
+              padding: '16px 24px',
+              display: 'flex',
+              justify: 'space-between',
+              alignItems: 'center'
+            }}>
+              <span style={{ color: 'var(--primary-cyan)', fontWeight: '600', fontSize: '0.9rem', letterSpacing: '0.5px' }}>
+                ✦ CARENET CARDIAC AI TELEMETRY
+              </span>
+              <span style={{ background: 'rgba(14, 165, 233, 0.2)', color: 'var(--primary-cyan)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.8rem', border: '1px solid rgba(14, 165, 233, 0.4)' }}>
+                ColumnTransformer + SVC Model
+              </span>
             </div>
           </div>
 
