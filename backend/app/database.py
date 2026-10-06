@@ -55,6 +55,7 @@ engine = get_engine()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def get_db():
+    _create_tables(engine)
     db = SessionLocal()
     try:
         yield db
