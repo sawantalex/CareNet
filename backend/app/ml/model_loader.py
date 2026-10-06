@@ -41,29 +41,25 @@ class ModelManager:
         logger.info("Loading ML models...")
         
         # Load Heart Disease Model
-        if not settings.HEART_MODEL_PATH.exists():
-            logger.error(f"Heart model PKL file not found at: {settings.HEART_MODEL_PATH}")
-            raise FileNotFoundError(f"Heart model PKL file not found at: {settings.HEART_MODEL_PATH}")
-        
-        try:
-            self.heart_model = joblib.load(settings.HEART_MODEL_PATH)
-            logger.info("Heart disease ML model loaded successfully.")
-        except Exception as e:
-            logger.error(f"Failed to load Heart disease ML model: {e}")
-            raise RuntimeError(f"Heart model loading failed: {e}")
+        if settings.HEART_MODEL_PATH.exists():
+            try:
+                self.heart_model = joblib.load(settings.HEART_MODEL_PATH)
+                logger.info("Heart disease ML model loaded successfully.")
+            except Exception as e:
+                logger.warning(f"Failed to load Heart disease ML model: {e}")
+        else:
+            logger.warning(f"Heart model PKL file not found at: {settings.HEART_MODEL_PATH}")
 
         # Load Medical Diagnosis Model
-        if not settings.MEDICAL_MODEL_PATH.exists():
-            logger.error(f"Medical diagnosis model PKL file not found at: {settings.MEDICAL_MODEL_PATH}")
-            raise FileNotFoundError(f"Medical diagnosis model PKL file not found at: {settings.MEDICAL_MODEL_PATH}")
-        
-        try:
-            self.medical_model = joblib.load(settings.MEDICAL_MODEL_PATH)
-            logger.info("Medical diagnosis ML model loaded successfully.")
-        except Exception as e:
-            logger.error(f"Failed to load Medical diagnosis ML model: {e}")
-            raise RuntimeError(f"Medical diagnosis model loading failed: {e}")
+        if settings.MEDICAL_MODEL_PATH.exists():
+            try:
+                self.medical_model = joblib.load(settings.MEDICAL_MODEL_PATH)
+                logger.info("Medical diagnosis ML model loaded successfully.")
+            except Exception as e:
+                logger.warning(f"Failed to load Medical diagnosis ML model: {e}")
+        else:
+            logger.warning(f"Medical diagnosis model PKL file not found at: {settings.MEDICAL_MODEL_PATH}")
 
-        self.loaded = True
+        self.loaded = (self.heart_model is not None or self.medical_model is not None)
 
 model_manager = ModelManager.get_instance()
