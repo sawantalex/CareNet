@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Stethoscope, AlertCircle, Sparkles, CheckCircle2, Trash2 } from 'lucide-react';
+import { Stethoscope, AlertCircle, Sparkles, CheckCircle2, Trash2, User } from 'lucide-react';
 import { medicalApi } from '../services/medicalApi';
 import Sidebar from '../components/Sidebar';
 import Disclaimer from '../components/Disclaimer';
@@ -15,6 +15,7 @@ const SAMPLE_SYMPTOMS = [
 ];
 
 const MedicalDiagnosis = () => {
+  const [userName, setUserName] = useState(() => localStorage.getItem('carenet_user_name') || '');
   const [symptoms, setSymptoms] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -45,6 +46,12 @@ const MedicalDiagnosis = () => {
     setError('');
     setResult(null);
 
+    const trimmedName = userName.trim();
+    if (!trimmedName) {
+      setError('Please enter your name to save and preserve your diagnosis history.');
+      return;
+    }
+
     if (!symptoms.trim()) {
       setError('Please enter your symptoms.');
       return;
@@ -53,7 +60,11 @@ const MedicalDiagnosis = () => {
     setLoading(true);
 
     try {
-      const res = await medicalApi.predict({ symptoms: symptoms });
+      localStorage.setItem('carenet_user_name', trimmedName);
+      const res = await medicalApi.predict({
+        symptoms: symptoms.trim(),
+        user_name: trimmedName
+      });
       setResult(res);
     } catch (err) {
       console.error("Medical diagnosis error:", err);
@@ -154,7 +165,28 @@ const MedicalDiagnosis = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '28px', marginBottom: '24px' }}>
+          <form onSubmit={handleSubmit} className="glass-card" style={{ padding: '28px', marginBottom: '24px', border: '1px solid var(--border-gold)' }}>
+            <div className="form-group" style={{ marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                <User size={18} color="var(--primary-gold)" />
+                <label style={{ fontSize: '1rem', color: '#ffffff', margin: 0 }}>
+                  Patient / User Name <span style={{ color: '#f43f5e' }}>*</span>
+                </label>
+              </div>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter your name (e.g. Alex Sawant)"
+                value={userName}
+                onChange={(e) => {
+                  setUserName(e.target.value);
+                  localStorage.setItem('carenet_user_name', e.target.value);
+                }}
+                required
+                style={{ fontSize: '1.02rem', padding: '12px 16px', background: 'rgba(15, 23, 42, 0.7)' }}
+              />
+            </div>
+
             <div className="form-group">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <label style={{ fontSize: '1rem', color: '#ffffff' }}>Describe Your Symptoms</label>

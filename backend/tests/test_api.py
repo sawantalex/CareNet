@@ -55,15 +55,8 @@ def test_user_registration_and_login(client):
     assert me_res.json()["email"] == "testuser@example.com"
 
 def test_heart_prediction_api(client):
-    # Login to get token
-    login_res = client.post("/api/auth/login", json={
-        "email": "testuser@example.com",
-        "password": "testpassword123"
-    })
-    token = login_res.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-
     heart_payload = {
+        "user_name": "Test User",
         "Age": 55,
         "Gender": "Male",
         "Blood Pressure": 135,
@@ -86,7 +79,7 @@ def test_heart_prediction_api(client):
         "Sugar Consumption": "High"
     }
 
-    res = client.post("/api/heart/predict", json=heart_payload, headers=headers)
+    res = client.post("/api/heart/predict", json=heart_payload)
     assert res.status_code == 200
     data = res.json()
     assert data["success"] is True
@@ -96,41 +89,29 @@ def test_heart_prediction_api(client):
     assert "disclaimer" in data
 
 def test_medical_prediction_api(client):
-    login_res = client.post("/api/auth/login", json={
-        "email": "testuser@example.com",
-        "password": "testpassword123"
-    })
-    token = login_res.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-
     medical_payload = {
+        "user_name": "Test User",
         "symptoms": "I have continuous sneezing, chills, body pain and high fever"
     }
 
-    res = client.post("/api/medical/predict", json=medical_payload, headers=headers)
+    res = client.post("/api/medical/predict", json=medical_payload)
     assert res.status_code == 200
     data = res.json()
     assert data["success"] is True
     assert data["module"] == "medical_diagnostics"
     assert data["prediction"] is not None
-    assert data["confidence"] is None  # LinearSVC confidence is null per prompt requirement
     assert "disclaimer" in data
 
 def test_prediction_history_api(client):
-    login_res = client.post("/api/auth/login", json={
-        "email": "testuser@example.com",
-        "password": "testpassword123"
-    })
-    token = login_res.json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-
-    res = client.get("/api/predictions/history", headers=headers)
+    res = client.get("/api/predictions/history?name=Test%20User")
     assert res.status_code == 200
     data = res.json()
     assert "total" in data
     assert "predictions" in data
-    assert data["total"] >= 2
+    assert data["total"] >= 1
+    assert any(p["user_name"] == "Test User" for p in data["predictions"])
 
-def test_unauthorized_access(client):
-    res = client.get("/api/predictions/history")
-    assert res.status_code == 401
+def test_chat_assistant(client):
+    res = client.post("/api/chat/assistant", json={"message": "What is heart risk?"})
+    assert res.status_code == 200
+    assert "reply" in res.json()

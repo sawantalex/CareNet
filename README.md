@@ -21,8 +21,8 @@
 | 🩺 **Medical Diagnosis** | AI-assisted symptom analysis and disease diagnosis |
 | 💬 **AI Health Chat** | Conversational AI assistant for medical queries |
 | 📊 **Prediction Dashboard** | Personal health overview with history & analytics |
-| 🔐 **Auth System** | JWT-based secure user registration, login, and profile management |
-| 📜 **Prediction History** | Full audit trail of all past predictions per user |
+| ⚡ **Direct Access** | Instant access without login/registration — just enter your name |
+| 📜 **Prediction History** | Full audit trail of all past predictions preserved by patient name |
 
 ---
 

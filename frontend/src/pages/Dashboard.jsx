@@ -11,7 +11,7 @@ import dashboard3d from '../assets/dashboard_3d.png';
 import '../styles/dashboard.css';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const savedName = localStorage.getItem('carenet_user_name') || 'Guest';
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -44,8 +44,8 @@ const Dashboard = () => {
       
       <main className="dashboard-content">
         <div className="welcome-header">
-          <h1>Welcome back, <span className="gradient-text">{user?.name && !user.name.includes('Mercer') ? user.name : 'Dr. Alex Sawant'}</span></h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Select an AI module below or view your prediction analytics.</p>
+          <h1>Welcome, <span className="gradient-text">{savedName}</span></h1>
+          <p style={{ color: 'var(--text-secondary)' }}>Select an AI prediction module below or view your diagnostic analytics.</p>
         </div>
 
         {/* 3D Clinical Diagnostics Analytics Hero Banner */}
@@ -124,8 +124,8 @@ const Dashboard = () => {
 
           <div className="glass-card stat-card">
             <div className="stat-info">
-              <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>Security Status</span>
-              <div className="stat-value" style={{ fontSize: '1.2rem', color: 'var(--primary-gold-light)', marginTop: '10px' }}>Active JWT</div>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>System Access</span>
+              <div className="stat-value" style={{ fontSize: '1.2rem', color: 'var(--primary-gold-light)', marginTop: '10px' }}>Direct Mode</div>
             </div>
             <div className="stat-icon" style={{ background: 'rgba(216, 180, 114, 0.15)', color: 'var(--primary-gold)' }}>
               <ShieldCheck size={24} />

@@ -22,6 +22,7 @@ class HeartPredictionRequest(BaseModel):
     Alcohol_Consumption: str = Field(..., alias="Alcohol Consumption", example="Low")  # Low, Medium, High
     Stress_Level: str = Field(..., alias="Stress Level", example="Medium")  # Low, Medium, High
     Sugar_Consumption: str = Field(..., alias="Sugar Consumption", example="Medium")  # Low, Medium, High
+    user_name: Optional[str] = Field("Guest", example="Alex")
 
     class Config:
         populate_by_name = True

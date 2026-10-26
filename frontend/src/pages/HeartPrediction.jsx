@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { HeartPulse, Activity, AlertCircle, Sparkles, CheckCircle2, RotateCcw } from 'lucide-react';
+import { HeartPulse, Activity, AlertCircle, Sparkles, CheckCircle2, RotateCcw, User } from 'lucide-react';
 import { heartApi } from '../services/heartApi';
 import Sidebar from '../components/Sidebar';
 import Disclaimer from '../components/Disclaimer';
@@ -54,6 +54,7 @@ const SAMPLE_HIGH_RISK = {
 };
 
 const HeartPrediction = () => {
+  const [userName, setUserName] = useState(() => localStorage.getItem('carenet_user_name') || '');
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -81,10 +82,21 @@ const HeartPrediction = () => {
     e.preventDefault();
     setError('');
     setResult(null);
+
+    const trimmedName = userName.trim();
+    if (!trimmedName) {
+      setError('Please enter your name to save and preserve your prediction history.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await heartApi.predict(formData);
+      localStorage.setItem('carenet_user_name', trimmedName);
+      const res = await heartApi.predict({
+        ...formData,
+        user_name: trimmedName
+      });
       setResult(res);
     } catch (err) {
       console.error("Heart prediction error:", err);
@@ -186,6 +198,30 @@ const HeartPrediction = () => {
           )}
 
           <form onSubmit={handleSubmit}>
+            {/* User / Patient Name Section */}
+            <div className="glass-card" style={{ padding: '20px 24px', marginBottom: '24px', border: '1px solid rgba(14, 165, 233, 0.4)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px', color: 'var(--primary-cyan)', fontWeight: 600 }}>
+                <User size={20} /> Patient / User Identification
+              </div>
+              <div className="form-group" style={{ margin: 0 }}>
+                <label style={{ fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
+                  Your Full Name <span style={{ color: '#f43f5e' }}>*</span> (used to preserve your prediction history)
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter your name (e.g. Alex Sawant)"
+                  value={userName}
+                  onChange={(e) => {
+                    setUserName(e.target.value);
+                    localStorage.setItem('carenet_user_name', e.target.value);
+                  }}
+                  required
+                  style={{ fontSize: '1.02rem', padding: '12px 16px', background: 'rgba(15, 23, 42, 0.7)' }}
+                />
+              </div>
+            </div>
+
             {/* Section 1: Biometric & General Info */}
             <div className="form-section">
               <div className="form-section-title">

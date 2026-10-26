@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Optional
 class PredictionOut(BaseModel):
     id: int
     user_id: int
+    user_name: Optional[str] = None
     module: str
     input_data: Dict[str, Any]
     prediction: str

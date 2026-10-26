@@ -3,6 +3,7 @@ from typing import Optional
 
 class MedicalPredictionRequest(BaseModel):
     symptoms: str = Field(..., min_length=3, max_length=2000, example="I have high fever, headache, cough and sore throat")
+    user_name: Optional[str] = Field("Guest", example="Alex")
 
 class MedicalPredictionResponse(BaseModel):
     success: bool = True

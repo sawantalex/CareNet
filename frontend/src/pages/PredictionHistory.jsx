@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { History, Filter, ChevronLeft, ChevronRight } from 'lucide-react';
+import { History, Filter, ChevronLeft, ChevronRight, User, Search, RotateCcw } from 'lucide-react';
 import { predictionApi } from '../services/predictionApi';
 import Sidebar from '../components/Sidebar';
 import PredictionCard from '../components/PredictionCard';
@@ -11,6 +11,8 @@ const PredictionHistory = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [moduleFilter, setModuleFilter] = useState('all');
+  const [nameFilter, setNameFilter] = useState(() => localStorage.getItem('carenet_user_name') || '');
+  const [searchQuery, setSearchQuery] = useState(() => localStorage.getItem('carenet_user_name') || '');
   const [loading, setLoading] = useState(true);
 
   const limit = 10;
@@ -19,6 +21,7 @@ const PredictionHistory = () => {
     setLoading(true);
     try {
       const data = await predictionApi.getHistory({
+        name: nameFilter.trim() || undefined,
         module: moduleFilter === 'all' ? undefined : moduleFilter,
         page,
         limit
@@ -34,7 +37,19 @@ const PredictionHistory = () => {
 
   useEffect(() => {
     fetchHistory();
-  }, [page, moduleFilter]);
+  }, [page, moduleFilter, nameFilter]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setNameFilter(searchQuery);
+    setPage(1);
+  };
+
+  const handleClearName = () => {
+    setSearchQuery('');
+    setNameFilter('');
+    setPage(1);
+  };
 
   const totalPages = Math.ceil(total / limit) || 1;
 
@@ -49,35 +64,64 @@ const PredictionHistory = () => {
               <History size={28} color="var(--primary-cyan)" />
               <h1 style={{ fontSize: '1.8rem', margin: 0 }}>Prediction <span className="gradient-text">History</span></h1>
             </div>
-            <p>Access your past AI assessment records and input parameters.</p>
+            <p>Access past AI assessments and biomarker logs preserved by patient name.</p>
           </div>
 
-          {/* Filter Bar */}
-          <div className="history-filter-bar">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Filter size={18} color="var(--text-muted)" />
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Filter by Module:</span>
-            </div>
+          {/* Search & Filter Bar */}
+          <div className="glass-card" style={{ padding: '16px 20px', marginBottom: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Name Search Form */}
+            <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
+                <Search size={16} color="var(--text-muted)" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Filter by patient name (e.g. Alex)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{ paddingLeft: '38px', margin: 0, fontSize: '0.9rem' }}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary" style={{ padding: '8px 18px', fontSize: '0.88rem' }}>
+                Filter
+              </button>
+              {nameFilter && (
+                <button type="button" onClick={handleClearName} className="btn btn-secondary" style={{ padding: '8px 14px', fontSize: '0.88rem' }}>
+                  <RotateCcw size={14} /> Show All Patients
+                </button>
+              )}
+            </form>
 
-            <div className="segmented-control" style={{ maxWidth: '420px' }}>
-              <button
-                className={`segmented-btn ${moduleFilter === 'all' ? 'active' : ''}`}
-                onClick={() => { setModuleFilter('all'); setPage(1); }}
-              >
-                All ({total})
-              </button>
-              <button
-                className={`segmented-btn ${moduleFilter === 'heart_disease' ? 'active' : ''}`}
-                onClick={() => { setModuleFilter('heart_disease'); setPage(1); }}
-              >
-                Heart AI
-              </button>
-              <button
-                className={`segmented-btn ${moduleFilter === 'medical_diagnostics' ? 'active' : ''}`}
-                onClick={() => { setModuleFilter('medical_diagnostics'); setPage(1); }}
-              >
-                Diagnostics
-              </button>
+            {/* Module Filter */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Filter size={16} color="var(--text-muted)" />
+                <span style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
+                  {nameFilter ? `Showing records for: ` : 'Showing records for: '}
+                  <strong style={{ color: 'var(--primary-gold-light)' }}>{nameFilter || 'All Patients'}</strong>
+                </span>
+              </div>
+
+              <div className="segmented-control" style={{ maxWidth: '380px', margin: 0 }}>
+                <button
+                  className={`segmented-btn ${moduleFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => { setModuleFilter('all'); setPage(1); }}
+                >
+                  All ({total})
+                </button>
+                <button
+                  className={`segmented-btn ${moduleFilter === 'heart_disease' ? 'active' : ''}`}
+                  onClick={() => { setModuleFilter('heart_disease'); setPage(1); }}
+                >
+                  Heart AI
+                </button>
+                <button
+                  className={`segmented-btn ${moduleFilter === 'medical_diagnostics' ? 'active' : ''}`}
+                  onClick={() => { setModuleFilter('medical_diagnostics'); setPage(1); }}
+                >
+                  Diagnostics
+                </button>
+              </div>
             </div>
           </div>
 

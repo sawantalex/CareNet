@@ -49,10 +49,16 @@ const Landing = () => {
           We partner with clinical researchers and healthcare providers to transform complex medical metrics and symptom patterns into actionable, high-performing diagnostic momentum.
         </p>
 
-        {/* Action Button */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <a href="#modules" className="btn btn-secondary" style={{ padding: '16px 32px', fontSize: '1.05rem' }}>
-            EXPLORE MODULES <ArrowDown size={20} />
+        {/* Action Buttons */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <Link to="/heart-prediction" className="btn btn-primary" style={{ padding: '16px 36px', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            START PREDICTION <ArrowUpRight size={20} />
+          </Link>
+          <Link to="/medical-diagnosis" className="btn btn-secondary" style={{ padding: '16px 28px', fontSize: '1.05rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <Stethoscope size={18} color="var(--primary-gold)" /> SYMPTOM DIAGNOSTICS
+          </Link>
+          <a href="#modules" className="btn btn-secondary" style={{ padding: '16px 24px', fontSize: '1.05rem' }}>
+            EXPLORE MODULES <ArrowDown size={18} />
           </a>
         </div>
 
@@ -158,7 +164,7 @@ const Landing = () => {
                 </li>
               </ul>
             </div>
-            <Link to="/register" className="btn btn-primary" style={{ width: '100%' }}>
+            <Link to="/heart-prediction" className="btn btn-primary" style={{ width: '100%' }}>
               RUN HEART ASSESSMENT <ArrowUpRight size={18} />
             </Link>
           </div>
@@ -197,7 +203,7 @@ const Landing = () => {
                 </li>
               </ul>
             </div>
-            <Link to="/register" className="btn btn-primary" style={{ width: '100%' }}>
+            <Link to="/medical-diagnosis" className="btn btn-primary" style={{ width: '100%' }}>
               RUN DIAGNOSTIC NLP <ArrowUpRight size={18} />
             </Link>
           </div>

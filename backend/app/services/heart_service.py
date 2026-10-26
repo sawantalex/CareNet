@@ -1,17 +1,20 @@
 import json
 from sqlalchemy.orm import Session
-from app.models.user import User
 from app.models.prediction import Prediction
 from app.schemas.heart import HeartPredictionRequest, HeartPredictionResponse
 from app.ml.heart_predictor import predict_heart_disease
+from app.services.prediction_service import get_or_create_user_by_name
 
-def process_heart_prediction(db: Session, current_user: User, request_data: HeartPredictionRequest) -> HeartPredictionResponse:
+def process_heart_prediction(db: Session, request_data: HeartPredictionRequest) -> HeartPredictionResponse:
     res = predict_heart_disease(request_data)
     
+    # Resolve user by name (preserves prediction history)
+    user = get_or_create_user_by_name(db, request_data.user_name)
+
     # Persist prediction in database
     input_json = json.dumps(res["input_dict"])
     db_pred = Prediction(
-        user_id=current_user.id,
+        user_id=user.id,
         module="heart_disease",
         input_data=input_json,
         prediction=res["prediction"],

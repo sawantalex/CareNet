@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeartPulse, Stethoscope, ChevronDown, ChevronUp, Calendar, CheckCircle, AlertTriangle } from 'lucide-react';
+import { HeartPulse, Stethoscope, ChevronDown, ChevronUp, Calendar, CheckCircle, AlertTriangle, User } from 'lucide-react';
 import Disclaimer from './Disclaimer';
 
 const PredictionCard = ({ item }) => {
@@ -36,9 +36,17 @@ const PredictionCard = ({ item }) => {
             <h4 style={{ fontSize: '1.05rem', margin: 0 }}>
               {isHeart ? 'Heart Disease Risk Assessment' : 'Medical Symptom Diagnostics'}
             </h4>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-              <Calendar size={14} />
-              <span>{formattedDate}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '4px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <Calendar size={13} />
+                <span>{formattedDate}</span>
+              </div>
+              {item.user_name && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '4px', color: 'var(--primary-gold-light)', background: 'rgba(216, 180, 114, 0.1)', padding: '2px 8px', borderRadius: '8px', border: '1px solid rgba(216, 180, 114, 0.25)' }}>
+                  <User size={12} />
+                  <span>Patient: <strong>{item.user_name}</strong></span>
+                </div>
+              )}
             </div>
           </div>
         </div>
