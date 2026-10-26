@@ -21,12 +21,6 @@ const Landing = () => {
         <CareNet3D />
 
         <div style={{ position: 'relative', zIndex: 2 }}>
-          {/* Top Capsule Pill Badge */}
-          <div className="pill-badge">
-            <span className="pill-badge-dot"></span>
-            BEYOND DIAGNOSTICS. BUILT FOR PRECISION.
-          </div>
-
           {/* Hero Title */}
           <h1 style={{
             fontSize: '4rem',
