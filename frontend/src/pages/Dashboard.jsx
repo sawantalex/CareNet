@@ -18,7 +18,12 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const data = await predictionApi.getHistory({ limit: 10 });
+        const params = { limit: 10 };
+        const storedName = localStorage.getItem('carenet_user_name');
+        if (storedName && storedName.trim() && storedName.trim().toLowerCase() !== 'guest') {
+          params.name = storedName.trim();
+        }
+        const data = await predictionApi.getHistory(params);
         setHistory(data.predictions || []);
       } catch (err) {
         console.error("Failed to load dashboard history:", err);

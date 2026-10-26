@@ -55,9 +55,23 @@ const SAMPLE_HIGH_RISK = {
 
 const HeartPrediction = () => {
   const [userName, setUserName] = useState(() => localStorage.getItem('carenet_user_name') || '');
-  const [formData, setFormData] = useState(DEFAULT_FORM);
+  const [formData, setFormData] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('carenet_heart_formData');
+      return saved ? JSON.parse(saved) : DEFAULT_FORM;
+    } catch {
+      return DEFAULT_FORM;
+    }
+  });
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('carenet_heart_result');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [error, setError] = useState('');
 
   const resultRef = useRef(null);
@@ -69,11 +83,21 @@ const HeartPrediction = () => {
   }, [result]);
 
   const handleChange = (field, val) => {
-    setFormData((prev) => ({ ...prev, [field]: val }));
+    setFormData((prev) => {
+      const updated = { ...prev, [field]: val };
+      try {
+        sessionStorage.setItem('carenet_heart_formData', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   };
 
   const handlePrefill = (sample) => {
     setFormData(sample);
+    try {
+      sessionStorage.setItem('carenet_heart_formData', JSON.stringify(sample));
+      sessionStorage.removeItem('carenet_heart_result');
+    } catch (e) {}
     setResult(null);
     setError('');
   };
@@ -98,6 +122,9 @@ const HeartPrediction = () => {
         user_name: trimmedName
       });
       setResult(res);
+      try {
+        sessionStorage.setItem('carenet_heart_result', JSON.stringify(res));
+      } catch (e) {}
     } catch (err) {
       console.error("Heart prediction error:", err);
       const msg = err.response?.data?.detail || 'Failed to generate heart disease risk prediction.';

@@ -16,9 +16,16 @@ const SAMPLE_SYMPTOMS = [
 
 const MedicalDiagnosis = () => {
   const [userName, setUserName] = useState(() => localStorage.getItem('carenet_user_name') || '');
-  const [symptoms, setSymptoms] = useState('');
+  const [symptoms, setSymptoms] = useState(() => sessionStorage.getItem('carenet_medical_symptoms') || '');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('carenet_medical_result');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
   const [error, setError] = useState('');
 
   const resultRef = useRef(null);
@@ -31,12 +38,20 @@ const MedicalDiagnosis = () => {
 
   const handleSample = (text) => {
     setSymptoms(text);
+    try {
+      sessionStorage.setItem('carenet_medical_symptoms', text);
+      sessionStorage.removeItem('carenet_medical_result');
+    } catch (e) {}
     setResult(null);
     setError('');
   };
 
   const handleClear = () => {
     setSymptoms('');
+    try {
+      sessionStorage.removeItem('carenet_medical_symptoms');
+      sessionStorage.removeItem('carenet_medical_result');
+    } catch (e) {}
     setResult(null);
     setError('');
   };
@@ -61,11 +76,17 @@ const MedicalDiagnosis = () => {
 
     try {
       localStorage.setItem('carenet_user_name', trimmedName);
+      try {
+        sessionStorage.setItem('carenet_medical_symptoms', symptoms);
+      } catch (e) {}
       const res = await medicalApi.predict({
         symptoms: symptoms.trim(),
         user_name: trimmedName
       });
       setResult(res);
+      try {
+        sessionStorage.setItem('carenet_medical_result', JSON.stringify(res));
+      } catch (e) {}
     } catch (err) {
       console.error("Medical diagnosis error:", err);
       const msg = err.response?.data?.detail || 'Failed to generate symptom diagnosis.';
@@ -197,7 +218,12 @@ const MedicalDiagnosis = () => {
                 className="form-control"
                 placeholder="Example: I have high fever, continuous sneezing, chills, body pain and headache..."
                 value={symptoms}
-                onChange={(e) => setSymptoms(e.target.value)}
+                onChange={(e) => {
+                  setSymptoms(e.target.value);
+                  try {
+                    sessionStorage.setItem('carenet_medical_symptoms', e.target.value);
+                  } catch (err) {}
+                }}
                 maxLength={2000}
                 rows={6}
                 required
