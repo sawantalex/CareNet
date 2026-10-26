@@ -3,63 +3,69 @@ import { Link } from 'react-router-dom';
 import { HeartPulse, Stethoscope, ArrowUpRight, ArrowDown, Phone, MessageSquare, CheckCircle2, ShieldCheck, Cpu } from 'lucide-react';
 import Disclaimer from '../components/Disclaimer';
 import Footer from '../components/Footer';
-import ThreeBackground from '../components/ThreeBackground';
+import CareNet3D from '../components/CareNet3D';
 import home3d from '../assets/home_3d.png';
 
 const Landing = () => {
   return (
     <div className="main-content" style={{ position: 'relative' }}>
-      <ThreeBackground />
-
       {/* Hero Section (IndoGlobal Dark Gold Luxury Style) */}
       <section style={{
         padding: '90px 24px 70px',
         maxWidth: '1100px',
         margin: '0 auto',
-        textAlign: 'center'
+        textAlign: 'center',
+        position: 'relative'
       }}>
-        {/* Top Capsule Pill Badge */}
-        <div className="pill-badge">
-          <span className="pill-badge-dot"></span>
-          BEYOND DIAGNOSTICS. BUILT FOR PRECISION.
-        </div>
+        {/* Interactive 3D Medical AI Diagnostic Engine Sphere */}
+        <CareNet3D />
 
-        {/* Hero Title */}
-        <h1 style={{
-          fontSize: '4rem',
-          lineHeight: 1.08,
-          marginBottom: '28px',
-          fontWeight: 800,
-          letterSpacing: '-0.03em',
-          color: 'var(--text-main)'
-        }}>
-          The AI Healthcare <br />
-          <span className="gradient-text">Diagnostic Engine.</span>
-        </h1>
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          {/* Top Capsule Pill Badge */}
+          <div className="pill-badge">
+            <span className="pill-badge-dot"></span>
+            BEYOND DIAGNOSTICS. BUILT FOR PRECISION.
+          </div>
 
-        {/* Hero Subtitle */}
-        <p style={{
-          fontSize: '1.25rem',
-          color: 'var(--text-secondary)',
-          maxWidth: '780px',
-          margin: '0 auto 42px',
-          lineHeight: 1.65,
-          fontWeight: 400
-        }}>
-          We partner with clinical researchers and healthcare providers to transform complex medical metrics and symptom patterns into actionable, high-performing diagnostic momentum.
-        </p>
+          {/* Hero Title */}
+          <h1 style={{
+            fontSize: '4rem',
+            lineHeight: 1.08,
+            marginBottom: '28px',
+            fontWeight: 800,
+            letterSpacing: '-0.03em',
+            color: 'var(--text-main)',
+            textShadow: '0 4px 20px rgba(0, 0, 0, 0.65)'
+          }}>
+            The AI Healthcare <br />
+            <span className="gradient-text">Diagnostic Engine.</span>
+          </h1>
 
-        {/* Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <Link to="/heart-prediction" className="btn btn-primary" style={{ padding: '16px 36px', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            START PREDICTION <ArrowUpRight size={20} />
-          </Link>
-          <Link to="/medical-diagnosis" className="btn btn-secondary" style={{ padding: '16px 28px', fontSize: '1.05rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            <Stethoscope size={18} color="var(--primary-gold)" /> SYMPTOM DIAGNOSTICS
-          </Link>
-          <a href="#modules" className="btn btn-secondary" style={{ padding: '16px 24px', fontSize: '1.05rem' }}>
-            EXPLORE MODULES <ArrowDown size={18} />
-          </a>
+          {/* Hero Subtitle */}
+          <p style={{
+            fontSize: '1.25rem',
+            color: 'var(--text-secondary)',
+            maxWidth: '780px',
+            margin: '0 auto 42px',
+            lineHeight: 1.65,
+            fontWeight: 400,
+            textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)'
+          }}>
+            We partner with clinical researchers and healthcare providers to transform complex medical metrics and symptom patterns into actionable, high-performing diagnostic momentum.
+          </p>
+
+          {/* Action Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+            <Link to="/heart-prediction" className="btn btn-primary" style={{ padding: '16px 36px', fontSize: '1.1rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+              START PREDICTION <ArrowUpRight size={20} />
+            </Link>
+            <Link to="/medical-diagnosis" className="btn btn-secondary" style={{ padding: '16px 28px', fontSize: '1.05rem', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+              <Stethoscope size={18} color="var(--primary-gold)" /> SYMPTOM DIAGNOSTICS
+            </Link>
+            <a href="#modules" className="btn btn-secondary" style={{ padding: '16px 24px', fontSize: '1.05rem' }}>
+              EXPLORE MODULES <ArrowDown size={18} />
+            </a>
+          </div>
         </div>
 
         {/* 3D Healthcare Showcase Hero Card */}
