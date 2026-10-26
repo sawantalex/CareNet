@@ -16,11 +16,13 @@ Classifier Type: <class 'sklearn.svm._classes.SVC'>
 Has predict_proba: True
 
 Testing Heart Model prediction with sample input:
-   Age  ... Sugar Consumption
-0   45  ...            Medium
+   Age Gender  ...  Stress Level  Sugar Consumption
+0   45   Male  ...        Medium             Medium
 
 [1 rows x 20 columns]
-Error inspecting heart model: 'SimpleImputer' object has no attribute '_fill_dtype'
+Prediction result: 0 (Type: <class 'numpy.int64'>)
+Probabilities: [[9.99997945e-01 2.05490431e-06]]
+Classes: [0 1]
 
 --- 2. MEDICAL DIAGNOSIS MODEL ---
 Model Type: <class 'sklearn.pipeline.Pipeline'>

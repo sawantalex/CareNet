@@ -49,19 +49,19 @@ def predict_heart_disease(request_data: HeartPredictionRequest):
         else:
             risk_prob = 0.5
 
-        # Format output string
-        prediction_str = "High Risk of Heart Disease" if raw_pred in [1, "1", "Yes", "High"] else "Low Risk of Heart Disease"
-        
-        # Risk level interpretation
-        if risk_prob >= 0.65:
+        # Risk level interpretation, prediction title, and clinical guidance
+        if risk_prob >= 0.60 or (raw_pred in [1, "1", "Yes", "High"] and risk_prob >= 0.50):
             risk_level = "High"
-            msg = "The model indicates an elevated risk of heart disease based on your inputs."
-        elif risk_prob >= 0.35:
+            prediction_str = "High Risk of Heart Disease"
+            msg = "The model indicates an elevated cardiovascular risk profile based on your biomarkers and health metrics. Consulting a healthcare professional is strongly recommended."
+        elif risk_prob >= 0.30:
             risk_level = "Moderate"
-            msg = "The model indicates a moderate heart disease risk. Lifestyle adjustments are recommended."
+            prediction_str = "Moderate Risk of Heart Disease"
+            msg = "The model indicates a moderate heart disease risk. Lifestyle adjustments and regular clinical monitoring are recommended."
         else:
             risk_level = "Low"
-            msg = "The model indicates a low heart disease risk profile."
+            prediction_str = "Low Risk of Heart Disease"
+            msg = "The model indicates a low heart disease risk profile based on your current metrics."
 
         return {
             "prediction": prediction_str,

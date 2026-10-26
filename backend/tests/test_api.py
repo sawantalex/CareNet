@@ -55,38 +55,71 @@ def test_user_registration_and_login(client):
     assert me_res.json()["email"] == "testuser@example.com"
 
 def test_heart_prediction_api(client):
-    heart_payload = {
+    # High risk case
+    high_risk_payload = {
         "user_name": "Test User",
-        "Age": 55,
+        "Age": 62,
         "Gender": "Male",
-        "Blood Pressure": 135,
-        "Cholesterol Level": 220,
-        "BMI": 27.5,
-        "Sleep Hours": 6.5,
-        "Triglyceride Level": 180,
-        "Fasting Blood Sugar": 110,
-        "CRP Level": 2.5,
-        "Homocysteine Level": 12.5,
+        "Blood Pressure": 160,
+        "Cholesterol Level": 290,
+        "BMI": 32.5,
+        "Sleep Hours": 5.0,
+        "Triglyceride Level": 310,
+        "Fasting Blood Sugar": 165,
+        "CRP Level": 4.8,
+        "Homocysteine Level": 18.2,
         "Exercise Habits": "Low",
         "Smoking": "Yes",
         "Family Heart Disease": "Yes",
-        "Diabetes": "No",
+        "Diabetes": "Yes",
         "High Blood Pressure": "Yes",
-        "Low HDL Cholesterol": "No",
+        "Low HDL Cholesterol": "Yes",
         "High LDL Cholesterol": "Yes",
-        "Alcohol Consumption": "Medium",
+        "Alcohol Consumption": "High",
         "Stress Level": "High",
         "Sugar Consumption": "High"
     }
 
-    res = client.post("/api/heart/predict", json=heart_payload)
-    assert res.status_code == 200
-    data = res.json()
-    assert data["success"] is True
-    assert data["module"] == "heart_disease"
-    assert "prediction" in data
-    assert "risk_level" in data
-    assert "disclaimer" in data
+    res_high = client.post("/api/heart/predict", json=high_risk_payload)
+    assert res_high.status_code == 200
+    data_high = res_high.json()
+    assert data_high["success"] is True
+    assert data_high["module"] == "heart_disease"
+    assert data_high["risk_level"] == "High"
+    assert "High Risk" in data_high["prediction"]
+    assert "disclaimer" in data_high
+
+    # Low risk case
+    low_risk_payload = {
+        "user_name": "Test User",
+        "Age": 24,
+        "Gender": "Female",
+        "Blood Pressure": 110,
+        "Cholesterol Level": 160,
+        "BMI": 20.5,
+        "Sleep Hours": 8.0,
+        "Triglyceride Level": 95,
+        "Fasting Blood Sugar": 85,
+        "CRP Level": 0.4,
+        "Homocysteine Level": 6.5,
+        "Exercise Habits": "High",
+        "Smoking": "No",
+        "Family Heart Disease": "No",
+        "Diabetes": "No",
+        "High Blood Pressure": "No",
+        "Low HDL Cholesterol": "No",
+        "High LDL Cholesterol": "No",
+        "Alcohol Consumption": "Low",
+        "Stress Level": "Low",
+        "Sugar Consumption": "Low"
+    }
+
+    res_low = client.post("/api/heart/predict", json=low_risk_payload)
+    assert res_low.status_code == 200
+    data_low = res_low.json()
+    assert data_low["success"] is True
+    assert data_low["risk_level"] == "Low"
+    assert "Low Risk" in data_low["prediction"]
 
 def test_medical_prediction_api(client):
     medical_payload = {
